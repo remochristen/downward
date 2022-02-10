@@ -94,6 +94,14 @@ void LandmarkFactory::edge_add(LandmarkNode &from, LandmarkNode &to,
     assert(from.parents.find(&to) == from.parents.end() || type <= EdgeType::REASONABLE);
     assert(to.children.find(&from) == to.children.end() || type <= EdgeType::REASONABLE);
 
+    Landmark &lm_to = to.get_landmark();
+    TaskProxy task_proxy(*lm_graph_task);
+    for (const FactPair &fact : lm_to.facts) {
+        if (task_proxy.get_variables()[fact.var].is_derived()) {
+            return;
+        }
+    }
+
     if (type == EdgeType::REASONABLE || type == EdgeType::OBEDIENT_REASONABLE) { // simple cycle test
         if (from.parents.find(&to) != from.parents.end()) { // Edge in opposite direction exists
             //utils::g_log << "edge in opposite direction exists" << endl;
