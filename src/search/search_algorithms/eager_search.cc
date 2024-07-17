@@ -34,7 +34,8 @@ EagerSearch::EagerSearch(
       f_evaluator(f_eval),     // default nullptr
       preferred_operator_evaluators(preferred),
       lazy_evaluator(lazy_evaluator),     // default nullptr
-      pruning_method(pruning) {
+      pruning_method(pruning),
+      num_open_insert(0) {
     if (lazy_evaluator && !lazy_evaluator->does_cache_estimates()) {
         cerr << "lazy_evaluator must cache its estimates" << endl;
         utils::exit_with(utils::ExitCode::SEARCH_INPUT_ERROR);
@@ -112,6 +113,7 @@ void EagerSearch::print_statistics() const {
     statistics.print_detailed_statistics();
     search_space.print_statistics();
     pruning_method->print_statistics();
+    log << "Number of open list insertions: " << num_open_insert << endl;
 }
 
 SearchStatus EagerSearch::step() {
@@ -239,6 +241,7 @@ SearchStatus EagerSearch::step() {
             succ_node.open_new_node(*node, op, get_adjusted_cost(op));
 
             open_list->insert(succ_eval_context, succ_state.get_id());
+            ++num_open_insert;
             if (search_progress.check_progress(succ_eval_context)) {
                 statistics.print_checkpoint_line(succ_node.get_g());
                 reward_progress();
@@ -251,6 +254,7 @@ SearchStatus EagerSearch::step() {
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), is_preferred, &statistics);
                 open_list->insert(succ_eval_context, succ_state.get_id());
+                ++num_open_insert;
             } else if (succ_node.is_closed() && reopen_closed_nodes) {
                 /*
                   TODO: It would be nice if we had a way to test
@@ -281,6 +285,7 @@ SearchStatus EagerSearch::step() {
                   from scratch.
                 */
                 open_list->insert(succ_eval_context, succ_state.get_id());
+                ++num_open_insert;
             } else {
                 /*
                   If we do not reopen closed nodes, we just update the parent
