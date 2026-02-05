@@ -26,8 +26,8 @@ public:
     virtual void set_objective_coefficients(
         const std::vector<double> &coefficients) = 0;
     virtual void set_objective_coefficient(int index, double coefficient) = 0;
-    virtual void set_constraint_lower_bound(int index, double bound) = 0;
-    virtual void set_constraint_upper_bound(int index, double bound) = 0;
+    virtual void set_constraint_lower_bound(int index, double bound, bool flag=false) = 0;
+    virtual void set_constraint_upper_bound(int index, double bound, bool flag=false) = 0;
     virtual void set_variable_lower_bound(int index, double bound) = 0;
     virtual void set_variable_upper_bound(int index, double bound) = 0;
 

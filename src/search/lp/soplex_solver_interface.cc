@@ -106,12 +106,12 @@ void SoPlexSolverInterface::set_objective_coefficient(
 }
 
 void SoPlexSolverInterface::set_constraint_lower_bound(
-    int index, double bound) {
+    int index, double bound, bool /*flag*/) {
     soplex.changeLhsReal(index, bound);
 }
 
 void SoPlexSolverInterface::set_constraint_upper_bound(
-    int index, double bound) {
+    int index, double bound, bool /*flag*/) {
     soplex.changeRhsReal(index, bound);
 }
 

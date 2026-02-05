@@ -130,8 +130,8 @@ public:
 
     void set_objective_coefficients(const std::vector<double> &coefficients);
     void set_objective_coefficient(int index, double coefficient);
-    void set_constraint_lower_bound(int index, double bound);
-    void set_constraint_upper_bound(int index, double bound);
+    void set_constraint_lower_bound(int index, double bound, bool flag=false);
+    void set_constraint_upper_bound(int index, double bound, bool flag=false);
     void set_variable_lower_bound(int index, double bound);
     void set_variable_upper_bound(int index, double bound);
 

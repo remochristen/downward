@@ -212,13 +212,17 @@ void GurobiSolverInterface::set_objective_coefficient(int index, double coeffici
     model_dirty = true;
 }
 
-void GurobiSolverInterface::set_constraint_lower_bound(int index, double bound) {
+void GurobiSolverInterface::set_constraint_lower_bound(int index, double bound, bool flag) {
     assert(index >= 0 && index < get_num_constraints());
     char sense;
     double current_rhs;
     GRB_CALL(env, GRBgetcharattrelement, model, GRB_CHAR_ATTR_SENSE, index, &sense);
-    GRB_CALL(env, GRBgetdblattrelement, model, GRB_DBL_ATTR_RHS, index, &current_rhs);       
-    if(sense == GRB_LESS_EQUAL) { // Constraint is of the form ax <= b
+    GRB_CALL(env, GRBgetdblattrelement, model, GRB_DBL_ATTR_RHS, index, &current_rhs); 
+    if(flag){
+        // Set contraint to equality and set rhs to bound
+        GRB_CALL(env, GRBsetcharattrelement, model, GRB_CHAR_ATTR_SENSE, index, GRB_EQUAL); // change sense to =
+        GRB_CALL(env, GRBsetdblattrelement, model, GRB_DBL_ATTR_RHS, index, bound); 
+    } else if(sense == GRB_LESS_EQUAL) { // Constraint is of the form ax <= b
         if (!is_pos_infinity(current_rhs)) { // Constraint is of the form ax <= finite value
             cerr << "Error: cannot set lower bound on <= constraint to a finite value." << endl;
             utils::exit_with(utils::ExitCode::SEARCH_CRITICAL_ERROR);
@@ -241,13 +245,15 @@ void GurobiSolverInterface::set_constraint_lower_bound(int index, double bound) 
     model_dirty = true;
 }
 
-void GurobiSolverInterface::set_constraint_upper_bound(int index, double bound) {
+void GurobiSolverInterface::set_constraint_upper_bound(int index, double bound, bool flag) {
     assert(index >= 0 && index < get_num_constraints());
     char sense;
     double current_rhs;
     GRB_CALL(env, GRBgetcharattrelement, model, GRB_CHAR_ATTR_SENSE, index, &sense);
     GRB_CALL(env, GRBgetdblattrelement, model, GRB_DBL_ATTR_RHS, index, &current_rhs);
-    if(sense == GRB_LESS_EQUAL) { // constraint is of the form ax <= b
+    if(flag){
+        // Do nothing here
+    } else if(sense == GRB_LESS_EQUAL) { // constraint is of the form ax <= b
         GRB_CALL(env, GRBsetdblattrelement, model, GRB_DBL_ATTR_RHS, index, bound);  
     } else if(sense == GRB_GREATER_EQUAL) {  // constraint is of the form ax >= b
         if (!is_neg_infinity(current_rhs)) { // constraint is of the form ax >= finite_value 

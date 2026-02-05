@@ -124,12 +124,12 @@ void HiGHSSolverInterface::set_objective_coefficient(int index, double coefficie
     highs_ok(highs_.changeColCost(index, coefficient), "changeColCost");
 }
 
-void HiGHSSolverInterface::set_constraint_lower_bound(int index, double bound) {
+void HiGHSSolverInterface::set_constraint_lower_bound(int index, double bound, bool flag) {
     const double ub = highs_.getLp().row_upper_[index];
     highs_ok(highs_.changeRowBounds(index, bound, ub), "changeRowBounds(lb)");
 }
 
-void HiGHSSolverInterface::set_constraint_upper_bound(int index, double bound) {
+void HiGHSSolverInterface::set_constraint_upper_bound(int index, double bound, bool flag) {
     const double lb = highs_.getLp().row_lower_[index];
     highs_ok(highs_.changeRowBounds(index, lb, bound), "changeRowBounds(ub)");
 }

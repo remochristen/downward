@@ -196,12 +196,12 @@ void LPSolver::set_objective_coefficient(int index, double coefficient) {
     pimpl->set_objective_coefficient(index, coefficient);
 }
 
-void LPSolver::set_constraint_lower_bound(int index, double bound) {
-    pimpl->set_constraint_lower_bound(index, bound);
+void LPSolver::set_constraint_lower_bound(int index, double bound, bool flag) {
+    pimpl->set_constraint_lower_bound(index, bound, flag);
 }
 
-void LPSolver::set_constraint_upper_bound(int index, double bound) {
-    pimpl->set_constraint_upper_bound(index, bound);
+void LPSolver::set_constraint_upper_bound(int index, double bound, bool flag) {
+    pimpl->set_constraint_upper_bound(index, bound, flag);
 }
 
 void LPSolver::set_variable_lower_bound(int index, double bound) {

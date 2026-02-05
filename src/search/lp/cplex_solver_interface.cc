@@ -434,11 +434,11 @@ void CplexSolverInterface::set_objective_coefficient(
     CPX_CALL(CPXchgobj, env, problem, 1, &index, &coefficient);
 }
 
-void CplexSolverInterface::set_constraint_lower_bound(int index, double bound) {
+void CplexSolverInterface::set_constraint_lower_bound(int index, double bound, bool flag) {
     change_constraint_bounds(index, bound, constraint_upper_bounds[index]);
 }
 
-void CplexSolverInterface::set_constraint_upper_bound(int index, double bound) {
+void CplexSolverInterface::set_constraint_upper_bound(int index, double bound, bool flag) {
     change_constraint_bounds(index, constraint_lower_bounds[index], bound);
 }
 
