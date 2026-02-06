@@ -595,7 +595,7 @@ if(USE_LP)
     endif()
 
 
-    find_package(soplex 7.1.0 QUIET)
+    find_package(soplex QUIET)
     if (SOPLEX_FOUND)
         message(STATUS "Found SoPlex: ${SOPLEX_INCLUDE_DIRS}")
         target_link_libraries(lp_solver INTERFACE libsoplex)
@@ -613,7 +613,8 @@ if(USE_LP)
 
     find_package(HiGHS CONFIG QUIET)
     if(HiGHS_FOUND)
-        target_compile_definitions(lp_solver INTERFACE HAS_HIGHS)
+	message(STATUS "Found HiGHS")        
+	target_compile_definitions(lp_solver INTERFACE HAS_HIGHS)
         target_link_libraries(lp_solver INTERFACE highs::highs)
         target_sources(lp_solver INTERFACE
             lp/highs_solver_interface.h
