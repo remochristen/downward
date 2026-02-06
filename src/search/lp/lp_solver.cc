@@ -18,6 +18,24 @@
 using namespace std;
 
 namespace lp {
+namespace {
+struct LpSolveStats {
+    vector<pair<int, int>> entries;
+};
+
+LpSolveStats lp_solve_stats;
+}
+void print_lp_solve_stats() {
+    if (lp_solve_stats.entries.empty()) {
+        return;
+    }
+    cout << "LP solve stats (vars, constraints):" << endl;
+    for (const auto &entry : lp_solve_stats.entries) {
+        cout << entry.first << ":" << entry.second <<",";
+    }
+    cout << endl;
+}
+
 void add_lp_solver_option_to_feature(plugins::Feature &feature) {
     feature.add_option<LPSolverType>(
         "lpsolver",
@@ -218,6 +236,11 @@ void LPSolver::set_mip_gap(double gap) {
 
 void LPSolver::solve() {
     pimpl->solve();
+    lp_solve_stats.entries.emplace_back(
+        get_num_variables(), get_num_constraints());
+    //cout << "LP solved with " << get_num_variables() << " variables and "
+     //    << get_num_constraints() << " constraints." << endl;
+    //print_lp_solve_stats();  
 }
 
 void LPSolver::write_lp(const string &filename) const {

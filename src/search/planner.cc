@@ -1,6 +1,7 @@
 #include "command_line.h"
 #include "git_revision.h"
 #include "search_algorithm.h"
+#include "lp/lp_solver.h"
 
 #include "task_utils/task_properties.h"
 #include "tasks/root_task.h"
@@ -56,6 +57,7 @@ int main(int argc, const char **argv) {
         ExitCode exitcode = search_algorithm->found_solution()
                                 ? ExitCode::SUCCESS
                                 : ExitCode::SEARCH_UNSOLVED_INCOMPLETE;
+        lp::print_lp_solve_stats();
         exit_with(exitcode);
     } catch (const utils::ExitException &e) {
         /* To ensure that all destructors are called before the program exits,
