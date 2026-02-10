@@ -85,7 +85,7 @@ void HiGHSSolverInterface::load_problem(const LinearProgram &lp) {
 void HiGHSSolverInterface::add_temporary_constraints(
     const named_vector::NamedVector<LPConstraint> &constraints) {
 
-    if (constraints.empty())
+    if (constraints.size() == 0)
         return;
 
     const double inf = get_infinity();
