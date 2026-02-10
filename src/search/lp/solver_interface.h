@@ -26,11 +26,9 @@ public:
     virtual void set_objective_coefficients(
         const std::vector<double> &coefficients) = 0;
     virtual void set_objective_coefficient(int index, double coefficient) = 0;
-    virtual void set_constraint_lower_bound(int index, double bound) = 0;
-    virtual void set_constraint_upper_bound(int index, double bound) = 0;
-    virtual void set_variable_lower_bound(int index, double bound) = 0;
-    virtual void set_variable_upper_bound(int index, double bound) = 0;
-
+    virtual void set_constraint_bound(int index, Sense sense, double right_hand_side);
+    virtual void set_variable_bound(int index, Sense sense, double right_hand_side);
+    
     virtual void set_mip_gap(double gap) = 0;
 
     virtual void solve() = 0;
