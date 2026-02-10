@@ -37,6 +37,25 @@ enum class Sense {
   GE, LE, EQ
 };
 
+inline void sense_rhs_to_bounds(Sense s, double rhs, double inf, double& lb, double& ub) {
+    switch (s) {
+    case Sense::LE:
+        lb = -inf;
+        ub = rhs;
+        break;
+    case Sense::GE:
+        lb = rhs;
+        ub = inf;
+        break;
+    case Sense::EQ:
+        lb = rhs;
+        ub = rhs;
+        break;
+    default:
+        throw std::logic_error("unknown sense");
+    }
+}
+
 std::ostream& operator<<(std::ostream& os, Sense s);
 
 
@@ -118,6 +137,8 @@ public:
     void set_objective_name(const std::string &name);
     const std::string &get_objective_name() const;
 };
+
+
 
 class LPSolver {
     std::unique_ptr<SolverInterface> pimpl;

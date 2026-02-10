@@ -11,7 +11,6 @@
 namespace lp {
 class HiGHSSolverInterface : public SolverInterface {
     mutable Highs highs_;
-    HighsModelStatus model_status_ = HighsModelStatus::kNotset;
     int num_permanent_constraints;
     int num_temporary_constraints;
 public:
@@ -27,10 +26,8 @@ public:
         const std::vector<double> &coefficients) override;
     virtual void set_objective_coefficient(
         int index, double coefficient) override;
-    virtual void set_constraint_lower_bound(int index, double bound) override;
-    virtual void set_constraint_upper_bound(int index, double bound) override;
-    virtual void set_variable_lower_bound(int index, double bound) override;
-    virtual void set_variable_upper_bound(int index, double bound) override;
+    virtual void set_constraint_bound(int index, Sense sense, double right_hand_side) override;
+    virtual void set_variable_bound(int index, Sense sense, double right_hand_side) override;
 
     virtual void set_mip_gap(double gap) override;
 
@@ -50,6 +47,11 @@ public:
     virtual int get_num_constraints() const override;
     virtual bool has_temporary_constraints() const override;
     virtual void print_statistics() const override;
+    private:
+        void set_constraint_lower_bound(int index, double bound);
+        void set_constraint_upper_bound(int index, double bound);
+        void set_variable_lower_bound(int index, double bound);
+        void set_variable_upper_bound(int index, double bound);
 };
 }
 
