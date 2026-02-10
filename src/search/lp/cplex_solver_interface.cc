@@ -274,6 +274,49 @@ bool CplexSolverInterface::is_trivially_unsolvable() const {
            0;
 }
 
+void CplexSolverInterface::set_constraint_bound(int index, Sense sense, double right_hand_side) {
+    const double inf = get_infinity();
+
+    switch (sense) {
+    case Sense::LE:
+        set_constraint_lower_bound(index, -inf);
+        set_constraint_upper_bound(index, right_hand_side);
+        break;
+    case Sense::GE:
+        set_constraint_lower_bound(index, right_hand_side);
+        set_constraint_upper_bound(index, inf);
+        break;
+    case Sense::EQ:
+        set_constraint_lower_bound(index, right_hand_side);
+        set_constraint_upper_bound(index, right_hand_side);
+        break;
+    default:
+        throw std::logic_error("unknown sense");
+    }
+}
+
+void CplexSolverInterface::set_variable_bound(int index, Sense sense, double right_hand_side) {
+    const double inf = get_infinity();
+
+    switch (sense) {
+    case Sense::LE:
+        set_variable_lower_bound(index, -inf);
+        set_variable_upper_bound(index, right_hand_side);
+        break;
+    case Sense::GE:
+        set_variable_lower_bound(index, right_hand_side);
+        set_variable_upper_bound(index, inf);
+        break;
+    case Sense::EQ:
+        set_variable_lower_bound(index, right_hand_side);
+        set_variable_upper_bound(index, right_hand_side);
+        break;
+    default:
+        throw std::logic_error("unknown sense");
+    }
+}
+
+
 void CplexSolverInterface::change_constraint_bounds(
     int index, double lb, double ub) {
     double current_lb = constraint_lower_bounds[index];
