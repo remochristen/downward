@@ -346,14 +346,20 @@ void DeleteRelaxationRRConstraints::create_constraints(
                 }
                 pair<FactPair, FactPair> key = make_pair(pre, eff);
                 if (!constraint3_ids.contains(key)) {
-                    constraint3_ids[key] = constraints.size();
-                    lp::LPConstraint constraint(lp::Sense::GE, 0);
-                    constraint.insert(lp_var_ids.id_of_fp(pre), 1);
-                    constraints.push_back(move(constraint));
+                    int lb_constraint_id = constraints.size();
+                    constraint3_ids[key] = lb_constraint_id;
+                    lp::LPConstraint lb_constraint(lp::Sense::GE, 0);
+                    lb_constraint.insert(lp_var_ids.id_of_fp(pre), 1);
+                    constraints.push_back(move(lb_constraint));
+                    lp::LPConstraint ub_constraint(lp::Sense:LE, 1);
+                    ub_constraint.insert(lp_var_ids.id_of_fp(pre), 1);
+                    constraints.push_back(move(ub_constraint));
                 }
-                int constraint_id = constraint3_ids[key];
-                lp::LPConstraint &constraint = constraints[constraint_id];
-                constraint.insert(lp_var_ids.id_of_fpa(eff, op), -1);
+                int lb_constraint_id = constraint3_ids[key];
+                int ub_constraint_id = lb_constraint_id + 1;
+                int variable_id = lp_var_ids.id_of_fpa(eff, op);
+                constraints[lb_constraint_id].insert(variable_id, -1);
+                constraints[ub_constraint_id].insert(variable_id, -1);
             }
         }
     }
