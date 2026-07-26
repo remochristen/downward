@@ -351,7 +351,7 @@ void DeleteRelaxationRRConstraints::create_constraints(
                     lp::LPConstraint lb_constraint(lp::Sense::GE, 0);
                     lb_constraint.insert(lp_var_ids.id_of_fp(pre), 1);
                     constraints.push_back(move(lb_constraint));
-                    lp::LPConstraint ub_constraint(lp::Sense:LE, 1);
+                    lp::LPConstraint ub_constraint(lp::Sense::LE, 1);
                     ub_constraint.insert(lp_var_ids.id_of_fp(pre), 1);
                     constraints.push_back(move(ub_constraint));
                 }
