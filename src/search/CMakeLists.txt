@@ -601,6 +601,13 @@ if(USE_LP)
         target_compile_definitions(lp_solver INTERFACE HAS_SOPLEX)
         target_sources(lp_solver INTERFACE lp/soplex_solver_interface.h lp/soplex_solver_interface.cc)
     endif()
+
+    find_package(Gurobi QUIET)
+    if(Gurobi_FOUND)
+        message(STATUS "Found Gurobi: ${GUROBI_LIBRARY} ${GUROBI_INCLUDE_DIR}")
+        target_compile_definitions(lp_solver INTERFACE HAS_GUROBI)
+        target_link_libraries(lp_solver INTERFACE gurobi::gurobi)
+    endif()
 endif()
 
 create_fast_downward_library(
