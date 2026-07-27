@@ -607,6 +607,7 @@ if(USE_LP)
         message(STATUS "Found Gurobi: ${GUROBI_LIBRARY} ${GUROBI_INCLUDE_DIR}")
         target_compile_definitions(lp_solver INTERFACE HAS_GUROBI)
         target_link_libraries(lp_solver INTERFACE gurobi::gurobi)
+        target_sources(lp_solver INTERFACE lp/gurobi_solver_interface.h lp/gurobi_solver_interface.cc)
     endif()
 endif()
 
