@@ -3,10 +3,19 @@
 
 #include "solver_interface.h"
 
+#include <gurobi_c.h>
+
 namespace lp {
 class GurobiSolverInterface : public SolverInterface {
+    GRBenv *env;
+    GRBmodel *model;
+    int num_permanent_constraints;
+    int num_temporary_constraints;
+    bool model_dirty;
+
 public:
     GurobiSolverInterface();
+    virtual ~GurobiSolverInterface() override;
 
     virtual void load_problem(const LinearProgram &lp) override;
     virtual void add_temporary_constraints(
@@ -16,8 +25,7 @@ public:
 
     virtual void set_objective_coefficients(
         const std::vector<double> &coefficients) override;
-    virtual void set_objective_coefficient(
-        int index, double coefficient) override;
+    virtual void set_objective_coefficient(int index, double coefficient) override;
     virtual void set_constraint_rhs(int index, double right_hand_side) override;
     virtual void set_constraint_sense(int index, lp::Sense sense) override;
     virtual void set_variable_lower_bound(int index, double bound) override;
