@@ -538,14 +538,12 @@ bool DeleteRelaxationRRConstraints::update_constraints(
     int con_id;
     for (FactPair f : last_state) {
         con_id = get_constraint_id(f);
-        lp_solver.set_constraint_sense(con_id, lp::Sense::EQ);
         lp_solver.set_constraint_rhs(con_id, 0);
     }
     last_state.clear();
     // Set new bounds.
     for (FactProxy f : state) {
         con_id = get_constraint_id(f.get_pair());
-        lp_solver.set_constraint_sense(con_id, lp::Sense::EQ);
         lp_solver.set_constraint_rhs(con_id, 1);
         last_state.push_back(f.get_pair());
     }
